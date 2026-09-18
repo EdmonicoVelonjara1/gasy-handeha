@@ -1,0 +1,1750 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.boat",
+    "label": "Create table \"boat\"",
+    "summary": "Creates table \"boat\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "boat"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"boat\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"boat\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"boat\"",
+        "sql": "CREATE TABLE \"public\".\"boat\" (\n  \"capacity\" int4 NOT NULL,\n  \"companyId\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"status\" text DEFAULT 'ACTIVE' NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"boat\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"boat\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.booking",
+    "label": "Create table \"booking\"",
+    "summary": "Creates table \"booking\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "booking"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"booking\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"booking\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"booking\"",
+        "sql": "CREATE TABLE \"public\".\"booking\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"paymentStatus\" text DEFAULT 'UNPAID' NOT NULL,\n  \"reference\" text NOT NULL,\n  \"seatsCount\" int4 DEFAULT 1 NOT NULL,\n  \"status\" text DEFAULT 'PENDING' NOT NULL,\n  \"totalAmount\" int4 NOT NULL,\n  \"tripId\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  \"userId\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"booking\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"booking\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.company",
+    "label": "Create table \"company\"",
+    "summary": "Creates table \"company\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "company"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"company\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"company\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"company\"",
+        "sql": "CREATE TABLE \"public\".\"company\" (\n  \"address\" text,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text,\n  \"id\" text NOT NULL,\n  \"logoUrl\" text,\n  \"name\" text NOT NULL,\n  \"phone\" text,\n  \"slug\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"company\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"company\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.payment",
+    "label": "Create table \"payment\"",
+    "summary": "Creates table \"payment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "payment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"payment\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"payment\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"payment\"",
+        "sql": "CREATE TABLE \"public\".\"payment\" (\n  \"amount\" int4 NOT NULL,\n  \"bookingId\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"paidAt\" timestamptz,\n  \"provider\" text NOT NULL,\n  \"reference\" text,\n  \"status\" text DEFAULT 'PENDING' NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"payment\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"payment\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.port",
+    "label": "Create table \"port\"",
+    "summary": "Creates table \"port\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "port"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"port\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"port\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"port\"",
+        "sql": "CREATE TABLE \"public\".\"port\" (\n  \"city\" text NOT NULL,\n  \"code\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"name\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"port\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"port\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.route",
+    "label": "Create table \"route\"",
+    "summary": "Creates table \"route\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "route"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"route\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"route\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"route\"",
+        "sql": "CREATE TABLE \"public\".\"route\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"destinationPortId\" text NOT NULL,\n  \"distanceKm\" float8,\n  \"estimatedMinutes\" int4,\n  \"id\" text NOT NULL,\n  \"originPortId\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"route\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"route\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.ticket",
+    "label": "Create table \"ticket\"",
+    "summary": "Creates table \"ticket\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ticket"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"ticket\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ticket\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"ticket\"",
+        "sql": "CREATE TABLE \"public\".\"ticket\" (\n  \"bookingId\" text NOT NULL,\n  \"cinOrPassport\" text,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" text NOT NULL,\n  \"passengerName\" text NOT NULL,\n  \"seatNumber\" text,\n  \"status\" text DEFAULT 'VALID' NOT NULL,\n  \"ticketNumber\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"ticket\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ticket\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.trip",
+    "label": "Create table \"trip\"",
+    "summary": "Creates table \"trip\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "trip"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"trip\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"trip\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"trip\"",
+        "sql": "CREATE TABLE \"public\".\"trip\" (\n  \"arrivalTime\" timestamptz,\n  \"availableSeats\" int4 NOT NULL,\n  \"boatId\" text NOT NULL,\n  \"code\" text,\n  \"companyId\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"departureTime\" timestamptz NOT NULL,\n  \"id\" text NOT NULL,\n  \"pricePerSeat\" int4 NOT NULL,\n  \"routeId\" text NOT NULL,\n  \"status\" text DEFAULT 'SCHEDULED' NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"trip\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"trip\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.user",
+    "label": "Create table \"user\"",
+    "summary": "Creates table \"user\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"user\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"user\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"user\"",
+        "sql": "CREATE TABLE \"public\".\"user\" (\n  \"companyId\" text,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"fullName\" text NOT NULL,\n  \"id\" text NOT NULL,\n  \"phone\" text,\n  \"role\" text DEFAULT 'passenger' NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"user\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"user\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.booking.booking_reference_key",
+    "label": "Add unique constraint on \"booking\" (reference)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "booking_reference_key",
+        "table": "booking"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"booking_reference_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "booking_reference_key",
+          "public",
+          "\"public\".\"booking\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"booking_reference_key\"",
+        "sql": "ALTER TABLE \"public\".\"booking\" ADD CONSTRAINT \"booking_reference_key\" UNIQUE (\"reference\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"booking_reference_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "booking_reference_key",
+          "public",
+          "\"public\".\"booking\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.company.company_slug_key",
+    "label": "Add unique constraint on \"company\" (slug)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "company_slug_key",
+        "table": "company"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"company_slug_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "company_slug_key",
+          "public",
+          "\"public\".\"company\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"company_slug_key\"",
+        "sql": "ALTER TABLE \"public\".\"company\" ADD CONSTRAINT \"company_slug_key\" UNIQUE (\"slug\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"company_slug_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "company_slug_key",
+          "public",
+          "\"public\".\"company\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.port.port_code_key",
+    "label": "Add unique constraint on \"port\" (code)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "port_code_key",
+        "table": "port"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"port_code_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "port_code_key",
+          "public",
+          "\"public\".\"port\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"port_code_key\"",
+        "sql": "ALTER TABLE \"public\".\"port\" ADD CONSTRAINT \"port_code_key\" UNIQUE (\"code\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"port_code_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "port_code_key",
+          "public",
+          "\"public\".\"port\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.ticket.ticket_ticketNumber_key",
+    "label": "Add unique constraint on \"ticket\" (ticketNumber)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "ticket_ticketNumber_key",
+        "table": "ticket"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"ticket_ticketNumber_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ticket_ticketNumber_key",
+          "public",
+          "\"public\".\"ticket\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"ticket_ticketNumber_key\"",
+        "sql": "ALTER TABLE \"public\".\"ticket\" ADD CONSTRAINT \"ticket_ticketNumber_key\" UNIQUE (\"ticketNumber\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"ticket_ticketNumber_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ticket_ticketNumber_key",
+          "public",
+          "\"public\".\"ticket\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.user.user_email_key",
+    "label": "Add unique constraint on \"user\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "user_email_key",
+        "table": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"user_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "user_email_key",
+          "public",
+          "\"public\".\"user\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"user_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"user\" ADD CONSTRAINT \"user_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"user_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "user_email_key",
+          "public",
+          "\"public\".\"user\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.boat.boat_companyId_idx_33acc5ed",
+    "label": "Create index \"boat_companyId_idx_33acc5ed\" on \"boat\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "boat_companyId_idx_33acc5ed",
+        "table": "boat"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"boat_companyId_idx_33acc5ed\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"boat_companyId_idx_33acc5ed\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"boat_companyId_idx_33acc5ed\"",
+        "sql": "CREATE INDEX \"boat_companyId_idx_33acc5ed\" ON \"public\".\"boat\" (\"companyId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"boat_companyId_idx_33acc5ed\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"boat_companyId_idx_33acc5ed\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.booking.booking_tripId_idx_75da6d97",
+    "label": "Create index \"booking_tripId_idx_75da6d97\" on \"booking\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "booking_tripId_idx_75da6d97",
+        "table": "booking"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"booking_tripId_idx_75da6d97\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"booking_tripId_idx_75da6d97\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"booking_tripId_idx_75da6d97\"",
+        "sql": "CREATE INDEX \"booking_tripId_idx_75da6d97\" ON \"public\".\"booking\" (\"tripId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"booking_tripId_idx_75da6d97\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"booking_tripId_idx_75da6d97\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.booking.booking_userId_idx_a489d58a",
+    "label": "Create index \"booking_userId_idx_a489d58a\" on \"booking\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "booking_userId_idx_a489d58a",
+        "table": "booking"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"booking_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"booking_userId_idx_a489d58a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"booking_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"booking_userId_idx_a489d58a\" ON \"public\".\"booking\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"booking_userId_idx_a489d58a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"booking_userId_idx_a489d58a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.payment.payment_bookingId_idx_17848f4a",
+    "label": "Create index \"payment_bookingId_idx_17848f4a\" on \"payment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "payment_bookingId_idx_17848f4a",
+        "table": "payment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"payment_bookingId_idx_17848f4a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"payment_bookingId_idx_17848f4a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"payment_bookingId_idx_17848f4a\"",
+        "sql": "CREATE INDEX \"payment_bookingId_idx_17848f4a\" ON \"public\".\"payment\" (\"bookingId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"payment_bookingId_idx_17848f4a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"payment_bookingId_idx_17848f4a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.route.route_destinationPortId_idx_c157944e",
+    "label": "Create index \"route_destinationPortId_idx_c157944e\" on \"route\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "route_destinationPortId_idx_c157944e",
+        "table": "route"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"route_destinationPortId_idx_c157944e\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"route_destinationPortId_idx_c157944e\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"route_destinationPortId_idx_c157944e\"",
+        "sql": "CREATE INDEX \"route_destinationPortId_idx_c157944e\" ON \"public\".\"route\" (\"destinationPortId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"route_destinationPortId_idx_c157944e\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"route_destinationPortId_idx_c157944e\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.route.route_originPortId_idx_eb172e6c",
+    "label": "Create index \"route_originPortId_idx_eb172e6c\" on \"route\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "route_originPortId_idx_eb172e6c",
+        "table": "route"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"route_originPortId_idx_eb172e6c\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"route_originPortId_idx_eb172e6c\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"route_originPortId_idx_eb172e6c\"",
+        "sql": "CREATE INDEX \"route_originPortId_idx_eb172e6c\" ON \"public\".\"route\" (\"originPortId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"route_originPortId_idx_eb172e6c\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"route_originPortId_idx_eb172e6c\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.ticket.ticket_bookingId_idx_17848f4a",
+    "label": "Create index \"ticket_bookingId_idx_17848f4a\" on \"ticket\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "ticket_bookingId_idx_17848f4a",
+        "table": "ticket"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"ticket_bookingId_idx_17848f4a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ticket_bookingId_idx_17848f4a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"ticket_bookingId_idx_17848f4a\"",
+        "sql": "CREATE INDEX \"ticket_bookingId_idx_17848f4a\" ON \"public\".\"ticket\" (\"bookingId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"ticket_bookingId_idx_17848f4a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"ticket_bookingId_idx_17848f4a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.trip.trip_boatId_idx_f1965246",
+    "label": "Create index \"trip_boatId_idx_f1965246\" on \"trip\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "trip_boatId_idx_f1965246",
+        "table": "trip"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"trip_boatId_idx_f1965246\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"trip_boatId_idx_f1965246\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"trip_boatId_idx_f1965246\"",
+        "sql": "CREATE INDEX \"trip_boatId_idx_f1965246\" ON \"public\".\"trip\" (\"boatId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"trip_boatId_idx_f1965246\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"trip_boatId_idx_f1965246\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.trip.trip_companyId_idx_33acc5ed",
+    "label": "Create index \"trip_companyId_idx_33acc5ed\" on \"trip\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "trip_companyId_idx_33acc5ed",
+        "table": "trip"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"trip_companyId_idx_33acc5ed\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"trip_companyId_idx_33acc5ed\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"trip_companyId_idx_33acc5ed\"",
+        "sql": "CREATE INDEX \"trip_companyId_idx_33acc5ed\" ON \"public\".\"trip\" (\"companyId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"trip_companyId_idx_33acc5ed\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"trip_companyId_idx_33acc5ed\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.trip.trip_routeId_idx_91ae2fd6",
+    "label": "Create index \"trip_routeId_idx_91ae2fd6\" on \"trip\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "trip_routeId_idx_91ae2fd6",
+        "table": "trip"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"trip_routeId_idx_91ae2fd6\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"trip_routeId_idx_91ae2fd6\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"trip_routeId_idx_91ae2fd6\"",
+        "sql": "CREATE INDEX \"trip_routeId_idx_91ae2fd6\" ON \"public\".\"trip\" (\"routeId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"trip_routeId_idx_91ae2fd6\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"trip_routeId_idx_91ae2fd6\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.boat.boat_companyId_fkey",
+    "label": "Add foreign key \"boat_companyId_fkey\" on \"boat\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "boat_companyId_fkey",
+        "table": "boat"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"boat_companyId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "boat_companyId_fkey",
+          "public",
+          "\"public\".\"boat\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"boat_companyId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"boat\"\nADD CONSTRAINT \"boat_companyId_fkey\"\nFOREIGN KEY (\"companyId\")\nREFERENCES \"public\".\"company\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"boat_companyId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "boat_companyId_fkey",
+          "public",
+          "\"public\".\"boat\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.booking.booking_userId_fkey",
+    "label": "Add foreign key \"booking_userId_fkey\" on \"booking\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "booking_userId_fkey",
+        "table": "booking"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"booking_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "booking_userId_fkey",
+          "public",
+          "\"public\".\"booking\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"booking_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"booking\"\nADD CONSTRAINT \"booking_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"user\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"booking_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "booking_userId_fkey",
+          "public",
+          "\"public\".\"booking\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.booking.booking_tripId_fkey",
+    "label": "Add foreign key \"booking_tripId_fkey\" on \"booking\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "booking_tripId_fkey",
+        "table": "booking"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"booking_tripId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "booking_tripId_fkey",
+          "public",
+          "\"public\".\"booking\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"booking_tripId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"booking\"\nADD CONSTRAINT \"booking_tripId_fkey\"\nFOREIGN KEY (\"tripId\")\nREFERENCES \"public\".\"trip\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"booking_tripId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "booking_tripId_fkey",
+          "public",
+          "\"public\".\"booking\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.payment.payment_bookingId_fkey",
+    "label": "Add foreign key \"payment_bookingId_fkey\" on \"payment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "payment_bookingId_fkey",
+        "table": "payment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"payment_bookingId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "payment_bookingId_fkey",
+          "public",
+          "\"public\".\"payment\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"payment_bookingId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"payment\"\nADD CONSTRAINT \"payment_bookingId_fkey\"\nFOREIGN KEY (\"bookingId\")\nREFERENCES \"public\".\"booking\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"payment_bookingId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "payment_bookingId_fkey",
+          "public",
+          "\"public\".\"payment\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.route.route_originPortId_fkey",
+    "label": "Add foreign key \"route_originPortId_fkey\" on \"route\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "route_originPortId_fkey",
+        "table": "route"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"route_originPortId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "route_originPortId_fkey",
+          "public",
+          "\"public\".\"route\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"route_originPortId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"route\"\nADD CONSTRAINT \"route_originPortId_fkey\"\nFOREIGN KEY (\"originPortId\")\nREFERENCES \"public\".\"port\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"route_originPortId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "route_originPortId_fkey",
+          "public",
+          "\"public\".\"route\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.route.route_destinationPortId_fkey",
+    "label": "Add foreign key \"route_destinationPortId_fkey\" on \"route\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "route_destinationPortId_fkey",
+        "table": "route"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"route_destinationPortId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "route_destinationPortId_fkey",
+          "public",
+          "\"public\".\"route\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"route_destinationPortId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"route\"\nADD CONSTRAINT \"route_destinationPortId_fkey\"\nFOREIGN KEY (\"destinationPortId\")\nREFERENCES \"public\".\"port\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"route_destinationPortId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "route_destinationPortId_fkey",
+          "public",
+          "\"public\".\"route\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.ticket.ticket_bookingId_fkey",
+    "label": "Add foreign key \"ticket_bookingId_fkey\" on \"ticket\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "ticket_bookingId_fkey",
+        "table": "ticket"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"ticket_bookingId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ticket_bookingId_fkey",
+          "public",
+          "\"public\".\"ticket\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"ticket_bookingId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"ticket\"\nADD CONSTRAINT \"ticket_bookingId_fkey\"\nFOREIGN KEY (\"bookingId\")\nREFERENCES \"public\".\"booking\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"ticket_bookingId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "ticket_bookingId_fkey",
+          "public",
+          "\"public\".\"ticket\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.trip.trip_companyId_fkey",
+    "label": "Add foreign key \"trip_companyId_fkey\" on \"trip\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "trip_companyId_fkey",
+        "table": "trip"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"trip_companyId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "trip_companyId_fkey",
+          "public",
+          "\"public\".\"trip\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"trip_companyId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"trip\"\nADD CONSTRAINT \"trip_companyId_fkey\"\nFOREIGN KEY (\"companyId\")\nREFERENCES \"public\".\"company\" (\"id\")\nON DELETE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"trip_companyId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "trip_companyId_fkey",
+          "public",
+          "\"public\".\"trip\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.trip.trip_boatId_fkey",
+    "label": "Add foreign key \"trip_boatId_fkey\" on \"trip\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "trip_boatId_fkey",
+        "table": "trip"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"trip_boatId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "trip_boatId_fkey",
+          "public",
+          "\"public\".\"trip\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"trip_boatId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"trip\"\nADD CONSTRAINT \"trip_boatId_fkey\"\nFOREIGN KEY (\"boatId\")\nREFERENCES \"public\".\"boat\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"trip_boatId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "trip_boatId_fkey",
+          "public",
+          "\"public\".\"trip\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.trip.trip_routeId_fkey",
+    "label": "Add foreign key \"trip_routeId_fkey\" on \"trip\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "trip_routeId_fkey",
+        "table": "trip"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"trip_routeId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "trip_routeId_fkey",
+          "public",
+          "\"public\".\"trip\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"trip_routeId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"trip\"\nADD CONSTRAINT \"trip_routeId_fkey\"\nFOREIGN KEY (\"routeId\")\nREFERENCES \"public\".\"route\" (\"id\")\nON DELETE RESTRICT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"trip_routeId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "trip_routeId_fkey",
+          "public",
+          "\"public\".\"trip\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.boat",
+    "label": "Disable RLS on \"boat\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "boat"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"boat\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "boat",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"boat\"",
+        "sql": "ALTER TABLE \"public\".\"boat\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"boat\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "boat",
+          "public"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.booking",
+    "label": "Disable RLS on \"booking\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "booking"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"booking\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "booking",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"booking\"",
+        "sql": "ALTER TABLE \"public\".\"booking\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"booking\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "booking",
+          "public"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.company",
+    "label": "Disable RLS on \"company\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "company"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"company\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "company",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"company\"",
+        "sql": "ALTER TABLE \"public\".\"company\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"company\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "company",
+          "public"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.payment",
+    "label": "Disable RLS on \"payment\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "payment"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"payment\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "payment",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"payment\"",
+        "sql": "ALTER TABLE \"public\".\"payment\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"payment\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "payment",
+          "public"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.port",
+    "label": "Disable RLS on \"port\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "port"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"port\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "port",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"port\"",
+        "sql": "ALTER TABLE \"public\".\"port\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"port\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "port",
+          "public"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.route",
+    "label": "Disable RLS on \"route\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "route"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"route\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "route",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"route\"",
+        "sql": "ALTER TABLE \"public\".\"route\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"route\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "route",
+          "public"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.ticket",
+    "label": "Disable RLS on \"ticket\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "ticket"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"ticket\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "ticket",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"ticket\"",
+        "sql": "ALTER TABLE \"public\".\"ticket\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"ticket\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "ticket",
+          "public"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.trip",
+    "label": "Disable RLS on \"trip\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "trip"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"trip\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "trip",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"trip\"",
+        "sql": "ALTER TABLE \"public\".\"trip\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"trip\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "trip",
+          "public"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "raw.disable-rls.user",
+    "label": "Disable RLS on \"user\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure RLS is enabled on \"user\"",
+        "sql": "SELECT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "user",
+          "public"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "disable RLS on \"user\"",
+        "sql": "ALTER TABLE \"public\".\"user\" DISABLE ROW LEVEL SECURITY",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify RLS disabled on \"user\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace WHERE c.relname = $1 AND n.nspname = $2 AND c.relrowsecurity) AS \"result\"",
+        "params": [
+          "user",
+          "public"
+        ]
+      }
+    ]
+  }
+]

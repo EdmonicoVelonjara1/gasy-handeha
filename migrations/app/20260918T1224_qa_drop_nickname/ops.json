@@ -1,0 +1,44 @@
+[
+  {
+    "id": "dropColumn.user.nickname",
+    "label": "Drop column \"nickname\" from \"user\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "nickname",
+        "table": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"nickname\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "user",
+          "nickname"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop column \"nickname\"",
+        "sql": "ALTER TABLE \"public\".\"user\" DROP COLUMN \"nickname\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"nickname\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "user",
+          "nickname"
+        ]
+      }
+    ]
+  }
+]

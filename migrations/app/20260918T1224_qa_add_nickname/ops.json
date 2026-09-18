@@ -1,0 +1,44 @@
+[
+  {
+    "id": "column.public.user.nickname",
+    "label": "Add column \"nickname\" to \"user\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "nickname",
+        "table": "user"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"nickname\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "user",
+          "nickname"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"nickname\"",
+        "sql": "ALTER TABLE \"public\".\"user\" ADD COLUMN \"nickname\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"nickname\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "user",
+          "nickname"
+        ]
+      }
+    ]
+  }
+]
