@@ -1,0 +1,34 @@
+{
+  // Tailwind v4: tell VS Code to use the Tailwind CSS language mode for all
+  // stylesheets, so `@theme` / `@source` are not flagged as unknown at-rules.
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  // Without this, VS Code does not suggest class names inside string literals,
+  // which is exactly where `className="..."` lives in JSX/TSX.
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  // The Tailwind extension auto-detects v4 entrypoints by looking for
+  // `@import "tailwindcss"`. NativeWind v5 requires the split imports
+  // (`tailwindcss/theme.css layer(theme)`, ... `utilities.css`) so that
+  // utilities stay unlayered above react-native-web defaults, so the
+  // auto-detection does not fire. Point at the entrypoint explicitly.
+  "tailwindCSS.experimental.configFile": "src/global.css",
+  // react-native-css also maps class names onto these custom props.
+  // (view `node_modules/react-native-css/types.d.ts`)
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "contentContainerClassName",
+    "columnWrapperClassName",
+    "imageClassName",
+    "ListHeaderComponentClassName",
+    "ListFooterComponentClassName"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit",
+    "source.sortMembers": "explicit"
+  }
+}
