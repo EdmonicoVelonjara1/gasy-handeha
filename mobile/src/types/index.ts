@@ -1,0 +1,1 @@
+export type Message = { tone: 'error' | 'info'; text: string } | null;

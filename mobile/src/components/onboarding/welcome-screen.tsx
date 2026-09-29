@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { RoleCard } from '@/components/onboarding/role-card';
 import type { UserRole } from '@/constants/onboarding';
-import { router } from 'expo-router';
 
 type WelcomeScreenProps = {
   onSelectRole: (role: UserRole) => void;
@@ -74,10 +73,7 @@ export function WelcomeScreen({ onSelectRole }: WelcomeScreenProps) {
               title="Je suis passager"
               description="Recherchez une traversée, réservez vos billets et suivez votre voyage."
               cta="Accéder à l’espace passager"
-              onPress={() => {
-                // onSelectRole('passenger')
-                router.replace('/auth')
-              }}
+              onPress={() => onSelectRole('passenger')}
             />
             <RoleCard
               role="company"
